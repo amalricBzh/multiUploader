@@ -1,0 +1,63 @@
+body {
+    font-size: 16px;
+    color: dimgrey;
+    background-color: #faf0f3;
+}
+
+.mainRow {
+    width: 700px;
+    margin: 10px auto;
+}
+
+#dropfile {
+    height: 150px;
+    margin: 50px auto;
+    border-radius: 30px;
+    border: 3px dashed dimgrey;
+    text-align: center;
+    line-height: 120px;
+    font-size: 2em;
+    background-color: #f2f2ff;
+}
+
+#dropfile.dragover {
+    border-color: red;
+    color: red;
+}
+
+#dropfile.transfering {
+    border-color: green;
+    color: #fa9625;
+}
+
+.progress {
+    height: 50px;
+    margin: 20px auto;
+    border-radius: 5px;
+    border: 1px solid dimgrey;
+    position: relative;
+}
+.progress:before {
+    content: attr(data-label);
+    position: absolute;
+    text-align: center;
+    top: 10px;
+    left: 0;
+    right: 0;
+    font-size: 1.5em;
+}
+
+.progress .value {
+    background-color: cornflowerblue;
+    display: inline-block;
+    height: 100%;
+    width: 0;
+}
+
+#dropfileinfomessage, #dropfileinfosize,
+#droptotalinfomessage, #droptotalinfosize{
+    display: inline-block;
+    margin:0;
+    width:50%;
+    text-align:center;
+}
