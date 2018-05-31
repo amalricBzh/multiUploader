@@ -1,12 +1,11 @@
 function formatBytes(bytes, decimals) {
     if(bytes === 0) return '0';
-    var k = 1024,
+    let k = 1024,
         dm = decimals || 2,
         sizes = ['o', 'Ko', 'Mo', 'Go'],
         i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
-
 
 
 function DropUpload(params) {
@@ -85,8 +84,8 @@ function DropUpload(params) {
         }
 
         // Add each file to queue
-        for (var i = 0; i < files.length ; i++) {
-            console.log('processFiles ', files[i]);
+        for (let i = 0; i < files.length ; i++) {
+            //console.log('processFiles ', files[i]);
             filelist.push(files[i]);
             nbFiles ++ ;
             totalSize += files[i].size;
@@ -104,7 +103,7 @@ function DropUpload(params) {
         isUploading = true ;
         lastFileSize = 0 ;
         if (filelist.length) {
-            var nextFile = filelist.shift();
+            let nextFile = filelist.shift();
             if (nextFile.size > 200 * 1024 * 1024) {
                 onEvent({message: 'Fichier \' + nextFile.name + \' trop gros : ignoré (maximum : 200Mo).'});
                 handleComplete(nextFile);
@@ -121,8 +120,8 @@ function DropUpload(params) {
     }
 
     function uploadFile(file) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:1234/imageRecorder.php');
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/imageRecorder.php');
         xhr.onload = function () {
             onEvent({message: '-->onload: ' + this.responseText});
             handleComplete(file);
@@ -146,13 +145,13 @@ function DropUpload(params) {
                 nbFilesCompleted: nbFilesCompleted
             });
         };
-        var formData = new FormData();
+        let formData = new FormData();
         formData.append('myfile', file);
         xhr.send(formData);
     }
 
     function handleProgress(event) {
-        var message = {
+        let message = {
             type: 'progress'
         };
         message.fileProgression = Math.round(100 * event.loaded/event.total);
@@ -167,7 +166,7 @@ function DropUpload(params) {
         onEvent(message);
     }
 
-    function handleComplete(file) {
+    function handleComplete(/* file */) {
         nbFilesCompleted ++ ;
         onEvent({
            type: 'progress',
@@ -183,7 +182,7 @@ function DropUpload(params) {
 }
 
 
-var dropper = new DropUpload({
+let dropper = new DropUpload({
     dropZone: '#dropfile',
     onEvent: onDropperEvent
 });
