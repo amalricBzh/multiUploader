@@ -2,7 +2,7 @@
 JS script to upload several files to a php server
 
 
-1. Create a "files" repository
+1. Create a "files" directory
 2. Update your php.ini settings in order to allow more big files transfert
 
 ```

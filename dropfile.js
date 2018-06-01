@@ -24,6 +24,7 @@ function DropUpload(params) {
     var nbFilesCompleted = 0 ;
 
     var isUploading = false ;
+    var chenillardStep = 0 ;
 
     function init() {
         filelist = [];
@@ -34,8 +35,6 @@ function DropUpload(params) {
         nbFiles = 0 ;
         nbFilesCompleted = 0 ;
     }
-
-
 
     /*************** Init ******/
     // Un peu d'animation sur les event drop et surtout éviter la propagation des évènements
@@ -76,6 +75,10 @@ function DropUpload(params) {
     });
 
     function processFiles(files) {
+        onEvent({
+            type: 'message',
+            asyncMessage: 'Lecture des fichiers'
+        });
         if (!files || !files.length) {
             return ;
         }
@@ -86,12 +89,10 @@ function DropUpload(params) {
 
         // Add each file to queue
         for (var i = 0; i < files.length ; i++) {
-            console.log('processFiles ', files[i]);
             filelist.push(files[i]);
             nbFiles ++ ;
             totalSize += files[i].size;
         }
-
 
         // If not uploading, start upload
         if (!isUploading) {
@@ -105,8 +106,20 @@ function DropUpload(params) {
         lastFileSize = 0 ;
         if (filelist.length) {
             var nextFile = filelist.shift();
+            onEvent({
+                type: 'message',
+                message: 'Transfert de '+ nextFile.name,
+                lastStatus: '.$nbsp;$nbsp;$nbsp;$nbsp;'
+            });
             if (nextFile.size > 200 * 1024 * 1024) {
-                onEvent({message: 'Fichier \' + nextFile.name + \' trop gros : ignoré (maximum : 200Mo).'});
+                onEvent({
+                    type: 'message',
+                    lastStatus: 'Erreur'
+                });
+                onEvent({
+                    type: 'message',
+                    message: 'Fichier \' + nextFile.name + \' trop gros : ignoré (maximum : 200Mo).'
+                });
                 handleComplete(nextFile);
             } else {
                 uploadFile(nextFile);
@@ -117,18 +130,32 @@ function DropUpload(params) {
             });
             $(dropZone).removeClass('transfering').removeClass('dragOver');
             init();
+            onEvent({
+                type: 'message',
+                asyncMessage: 'Tous les transferts sont terminés !',
+            });
         }
     }
 
     function uploadFile(file) {
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('POST', 'http://localhost:1234/imageRecorder.php');
         xhr.onload = function () {
-            onEvent({message: '-->onload: ' + this.responseText});
+            onEvent({
+                type: 'message',
+                lastStatus: 'Terminé'
+            });
             handleComplete(file);
         };
         xhr.error = function () {
-            onEvent({message: '-->onerror: ' + this.responseText});
+            onEvent({
+                type: 'message',
+                lastStatus: 'Erreur'
+            });
+            onEvent({
+                type: 'message',
+                message: 'Erreur de transfert, le fichier n\'a pas été transféré.'
+            });
             handleComplete(file);
         };
         xhr.upload.onprogress = function (event) {
@@ -152,7 +179,18 @@ function DropUpload(params) {
     }
 
     function handleProgress(event) {
-        var message = {
+        chenillardStep ++ ;
+        let steps = [
+                '.&nbsp;&nbsp;&nbsp;&nbsp;', '&nbsp;.&nbsp;&nbsp;&nbsp;', '&nbsp;&nbsp;.&nbsp;&nbsp;', '&nbsp;&nbsp;&nbsp;.&nbsp;', '&nbsp;&nbsp;&nbsp;&nbsp;.',
+                '&nbsp;&nbsp;&nbsp;.&nbsp;', '&nbsp;&nbsp;.&nbsp;&nbsp;', '&nbsp;.&nbsp;&nbsp;&nbsp;'
+        ];
+        chenillardStep %= steps.length ;
+        onEvent({
+            type: 'message',
+            lastStatus: steps[chenillardStep]
+        });
+
+        let message = {
             type: 'progress'
         };
         message.fileProgression = Math.round(100 * event.loaded/event.total);
@@ -183,7 +221,7 @@ function DropUpload(params) {
 }
 
 
-var dropper = new DropUpload({
+let dropper = new DropUpload({
     dropZone: '#dropfile',
     onEvent: onDropperEvent
 });
@@ -203,6 +241,7 @@ function onDropperEvent(event) {
             if (event.fileCurrent === event.fileMax) {
                 // Tout est transféré, il faut copier du répertoire temporaire au final (en php)
                 $('#dropfileinfosize').html('Finalisation...');
+                editHistory('Finalisation...');
             } else {
                 $('#dropfileinfosize').html(formatBytes(event.fileCurrent)+'/'+formatBytes(event.fileMax));
             }
@@ -221,10 +260,43 @@ function onDropperEvent(event) {
     }
     if (event.type && event.type === 'start') {
         $('#dropfile').html('Transfert en cours...');
+        $('#dropInfo').show();
     }
     if (event.type && event.type === 'end') {
         $('#dropfile').html('Déposez un ou plusieurs fichiers ici.');
         $('#dropfileinfosize').html('Terminé.');
     }
-    console.log('onDropperEvent', event);
+    //console.log('onDropperEvent', event);
+
+    if (event.type && event.type === 'message') {
+        if (event.message) {
+            addHistory(event.message);
+        }
+        if (event.lastStatus) {
+            editHistory(event.lastStatus);
+        }
+        if (event.asyncMessage) {
+            addAsyncHistory(event.asyncMessage);
+        }
+    }
 }
+
+function addHistory(text, edit) {
+    edit = edit || '';
+    let history = $('#history');
+    history
+        .append('<div class="dyn">'+text+' <span>'+edit+'</span></div>')
+        .animate({scrollTop: history.prop("scrollHeight")}, 100);
+}
+
+function addAsyncHistory(text) {
+    let history = $('#history');
+    history
+        .append('<div>'+text+'</div>')
+        .animate({scrollTop: history.prop("scrollHeight")}, 100);
+}
+
+function editHistory(text) {
+    $('#history div.dyn span').last().html(text);
+}
+
