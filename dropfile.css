@@ -30,6 +30,10 @@ body {
     color: #fa9625;
 }
 
+#dropInfo {
+    display: none;
+}
+
 .progress {
     height: 50px;
     margin: 20px auto;
@@ -60,4 +64,16 @@ body {
     margin:0;
     width:50%;
     text-align:center;
+}
+
+#history {
+    border-radius: 5px;
+    border: 1px solid dimgrey;
+    padding: 10px;
+    height: 180px;
+    overflow-y: auto;
+}
+
+#history div span {
+    float: right;
 }
