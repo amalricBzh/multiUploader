@@ -12,6 +12,10 @@ function DropUpload(params) {
 
     var dropZone = params.dropZone ;
     var onEvent = params.onEvent ;
+    var user = {
+        name:  params.usernameField || '',
+        email: params.emailField || ''
+    };
 
     var filelist = [];
     var lastFileSize = 0 ;
@@ -57,7 +61,6 @@ function DropUpload(params) {
     });
 
     // Gestion du largage des fichiers
-    // Gestion du largage des éléments
     $(document).on('drop', dropZone, function(event) {
         if (event.originalEvent.dataTransfer) {
             if (event.originalEvent.dataTransfer.files.length) {
@@ -88,6 +91,7 @@ function DropUpload(params) {
 
         // Add each file to queue
         for (let i = 0; i < files.length ; i++) {
+            console.log(files[i]);
             filelist.push(files[i]);
             nbFiles ++ ;
             totalSize += files[i].size;
@@ -174,6 +178,17 @@ function DropUpload(params) {
         };
         let formData = new FormData();
         formData.append('myfile', file);
+        if (user.name !== '') {
+            formData.append('username', $(user.name).val());
+        } else {
+            formData.append('username', '');
+        }
+        if (user.email !== '') {
+            formData.append('email', $(user.email).val());
+        } else {
+            formData.append('email', '');
+        }
+
         xhr.send(formData);
     }
 
@@ -222,7 +237,9 @@ function DropUpload(params) {
 
 let dropper = new DropUpload({
     dropZone: '#dropfile',
-    onEvent: onDropperEvent
+    onEvent: onDropperEvent,
+    usernameField: '#username',
+    emailField: '#email'
 });
 
 

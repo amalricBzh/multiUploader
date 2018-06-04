@@ -77,3 +77,11 @@ body {
 #history div span {
     float: right;
 }
+
+input {
+    width: 45%;
+    border-radius: 5px ;
+    margin: 5px auto;
+    padding: 3px 5px;
+    font-size: 1.2em;
+}

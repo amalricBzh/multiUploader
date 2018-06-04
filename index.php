@@ -9,6 +9,14 @@
 <body>
     <h1>Drag and drop test</h1>
 
+    <div class="mainRow">
+        Afin de nous permettre de reconnaître vos photos, merci de renseigner ces deux champs&nbsp;:
+    </div>
+    <div class="mainRow">
+        <input id="username" name="nom" placeholder="Vos prénom et nom" />
+        &nbsp; &nbsp; &nbsp;
+        <input id="email" name="email" placeholder="Votre email" />
+    </div>
     <div id="dropfile" class="mainRow">Déposez un ou plusieurs fichiers ici.</div>
 
     <div id="dropInfo">
