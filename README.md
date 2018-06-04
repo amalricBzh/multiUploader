@@ -3,7 +3,7 @@ JS script to upload several files to a php server
 
 
 1. Create a "files" directory
-2. Update your php.ini settings in order to allow more big files transfert
+2. Update your php.ini settings in order to allow bigger files to be transfered
 
 ```
     post_max_size = 200M
