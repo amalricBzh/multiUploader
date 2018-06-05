@@ -25,20 +25,27 @@ if (isset($_FILES['myfile'])) {
     $username = $_POST['username'] ;
     $email = $_POST['email'] ;
 
-    $directory = "Anonyme" ;
+    $directory = 'files/'.$_POST['directory'].'/';
+
+    $userInfo = "Anonyme" ;
+
     if ($username !== ''){
-        $directory = filterString($username) ;
+        $userInfo = $username ;
     }
     if ($email !== '') {
-        $directory .= '(' . filterMail($email) .')';
+        $userInfo .= ' - ' . $email;
     }
-
-    $directory = 'files/'.$directory.'/' ;
 
     if (!file_exists($directory)) {
         mkdir($directory, 0777, true);
     }
-
+    // Write file info
+    file_put_contents(
+        $directory . 'info.txt',
+        date("Y-m-d H:i:s"). ' ; ' . $userInfo . ' ; ' . $_FILES['myfile']['name'] . "\r\n",
+        FILE_APPEND | LOCK_EX
+    );
+    // Move uploaded file
     move_uploaded_file( $_FILES['myfile']['tmp_name'], $directory. $_FILES['myfile']['name']);
 
     echo <<<EOF

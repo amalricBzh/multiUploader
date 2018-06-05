@@ -1,16 +1,22 @@
-<?php
-
-?><html>
+<html>
 <header>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Pinyon+Script|Lobster|Prompt|Racing+Sans+One|Share+Tech+Mono" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="dropfile.css">
+    <title>21 juillet 2018 - Les photos</title>
 </header>
 <body>
-    <h1>Drag and drop test</h1>
+    <div id="spinner">
+        <div class="lds-heart"><div></div></div>
+    </div>
 
-    <div class="mainRow">
-        Afin de nous permettre de reconnaître vos photos, merci de renseigner ces deux champs&nbsp;:
+    <header>
+        <h1>Les photos - 21 juillet 2018</h1>
+    </header>
+
+    <div class="mainRow infoChamps">
+        Afin de nous permettre de reconnaître vos photos, merci de renseigner ces deux champs facultatifs&nbsp;:
     </div>
     <div class="mainRow">
         <input id="username" name="nom" placeholder="Vos prénom et nom" />

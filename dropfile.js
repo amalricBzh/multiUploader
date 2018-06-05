@@ -1,3 +1,10 @@
+// Remove spinner when all is loaded (especially web fonts)
+$(window).bind("load", function(){
+    $('#spinner').fadeOut(800, function() {
+        (this).remove();
+    });
+});
+
 function formatBytes(bytes, decimals) {
     if(bytes === 0) return '0';
     let k = 1024,
@@ -28,6 +35,11 @@ function DropUpload(params) {
 
     var isUploading = false ;
     var chenillardStep = 0 ;
+
+    // nom du répertoire basé sur le timestamp en secondes pour un nom
+    // unique pseudo-aléatoire. Valable pour toutes les phots chargées par
+    // cette page
+    var directory = Math.floor(Date.now() / 1000) - 1528200000 ;
 
     function init() {
         filelist = [];
@@ -178,6 +190,7 @@ function DropUpload(params) {
         };
         let formData = new FormData();
         formData.append('myfile', file);
+        formData.append('directory', directory);
         if (user.name !== '') {
             formData.append('username', $(user.name).val());
         } else {
@@ -190,13 +203,14 @@ function DropUpload(params) {
         }
 
         xhr.send(formData);
+        file = undefined ;
     }
 
     function handleProgress(event) {
         chenillardStep ++ ;
         let steps = [
-                '.&nbsp;&nbsp;&nbsp;&nbsp;', '&nbsp;.&nbsp;&nbsp;&nbsp;', '&nbsp;&nbsp;.&nbsp;&nbsp;', '&nbsp;&nbsp;&nbsp;.&nbsp;', '&nbsp;&nbsp;&nbsp;&nbsp;.',
-                '&nbsp;&nbsp;&nbsp;.&nbsp;', '&nbsp;&nbsp;.&nbsp;&nbsp;', '&nbsp;.&nbsp;&nbsp;&nbsp;'
+                '*&nbsp;&nbsp;&nbsp;&nbsp;', '&nbsp;*&nbsp;&nbsp;&nbsp;', '&nbsp;&nbsp;*&nbsp;&nbsp;', '&nbsp;&nbsp;&nbsp;*&nbsp;', '&nbsp;&nbsp;&nbsp;&nbsp;*',
+                '&nbsp;&nbsp;&nbsp;*&nbsp;', '&nbsp;&nbsp;*&nbsp;&nbsp;', '&nbsp;*&nbsp;&nbsp;&nbsp;'
         ];
         chenillardStep %= steps.length ;
         onEvent({
@@ -216,6 +230,11 @@ function DropUpload(params) {
         message.totalProgression = Math.round(100 * totalProgress / totalSize);
         message.totalCurrent = totalProgress ;
         message.totalMax = totalSize;
+        // contournement pb sur les arrondis et somme d'arrondis...
+        if (message.totalProgression >= 100) {
+            message.totalProgression = 100 ;
+            message.totalCurrent = message.totalMax ;
+        }
         onEvent(message);
     }
 
