@@ -6,7 +6,9 @@ $(window).bind("load", function(){
 });
 
 function formatBytes(bytes, decimals) {
-    if(bytes === 0) return '0';
+    if(bytes === 0) {
+        return "0" ;
+    }
     let k = 1024,
         dm = decimals || 2,
         sizes = ["o", "Ko", "Mo", "Go"],
@@ -87,8 +89,8 @@ function DropUpload(params) {
         nbFilesCompleted ++ ;
         onEvent({
             type: "progress",
-            nbFiles: nbFiles,
-            nbFilesCompleted: nbFilesCompleted
+            nbFiles,
+            nbFilesCompleted
         });
         uploadNext();
     }
@@ -125,8 +127,8 @@ function DropUpload(params) {
                 fileCurrent: event.loaded,
                 totalMax: totalSize,
                 totalCurrent: totalProgress,
-                nbFiles: nbFiles,
-                nbFilesCompleted: nbFilesCompleted
+                nbFiles,
+                nbFilesCompleted
             });
         };
         let formData = new FormData();
@@ -144,7 +146,7 @@ function DropUpload(params) {
         }
 
         xhr.send(formData);
-        file = undefined ;
+        file = null ;
     }
 
     function uploadNext() {
@@ -186,8 +188,8 @@ function DropUpload(params) {
 
     function processFiles(files) {
         onEvent({
-            type: 'message',
-            asyncMessage: 'Lecture des fichiers'
+            type: "message",
+            asyncMessage: "Lecture des fichiers"
         });
         if (!files || !files.length) {
             return ;
@@ -249,19 +251,28 @@ function DropUpload(params) {
         }
     });
 
-    return {
-
-    }
+    return {}
 }
 
 
-let dropper = new DropUpload({
-    dropZone: "#dropfile",
-    onEvent: onDropperEvent,
-    usernameField: "#username",
-    emailField: "#email"
-});
+function addHistory(text, edit) {
+    edit = edit || "";
+    let history = $("#history");
+    history
+        .append('<div class="dyn">'+text+" <span>"+edit+"</span></div>")
+        .animate({scrollTop: history.prop("scrollHeight")}, 80);
+}
 
+function addAsyncHistory(text) {
+    let history = $("#history");
+    history
+        .append("<div>"+text+"</div>")
+        .animate({scrollTop: history.prop("scrollHeight")}, 80);
+}
+
+function editHistory(text) {
+    $("#history div.dyn span").last().html(text);
+}
 
 function onDropperEvent(event) {
     if (event.type && (event.type === "progress" || event.type === "start")) {
@@ -302,10 +313,10 @@ function onDropperEvent(event) {
         $("#dropfile").html("Déposez un ou plusieurs fichiers ici.");
         $("#dropfileinfosize").html("Terminé.");
     }
-    //console.log('onDropperEvent', event);
+    //console.log("onDropperEvent", event);
 
     if (event.type && event.type === "message") {
-        console.log(event);
+        //console.log(event);
         if (event.message) {
             addHistory(event.message);
         }
@@ -336,22 +347,9 @@ function onDropperEvent(event) {
     }
 }
 
-function addHistory(text, edit) {
-    edit = edit || "";
-    let history = $("#history");
-    history
-        .append('<div class="dyn">'+text+" <span>"+edit+"</span></div>")
-        .animate({scrollTop: history.prop("scrollHeight")}, 80);
-}
-
-function addAsyncHistory(text) {
-    let history = $("#history");
-    history
-        .append("<div>"+text+"</div>")
-        .animate({scrollTop: history.prop("scrollHeight")}, 80);
-}
-
-function editHistory(text) {
-    $("#history div.dyn span").last().html(text);
-}
-
+new DropUpload({
+    dropZone: "#dropfile",
+    onEvent: onDropperEvent,
+    usernameField: "#username",
+    emailField: "#email"
+});
