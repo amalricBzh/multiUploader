@@ -103,7 +103,7 @@ function DropUpload(params) {
 
         // Add each file to queue
         for (let i = 0; i < files.length ; i++) {
-            console.log(files[i]);
+            //console.log(files[i]);
             filelist.push(files[i]);
             nbFiles ++ ;
             totalSize += files[i].size;
@@ -148,6 +148,7 @@ function DropUpload(params) {
             onEvent({
                 type: 'message',
                 asyncMessage: 'Tous les transferts sont terminés !',
+                galerie: directory
             });
         }
     }
@@ -304,6 +305,7 @@ function onDropperEvent(event) {
     //console.log('onDropperEvent', event);
 
     if (event.type && event.type === 'message') {
+        console.log(event);
         if (event.message) {
             addHistory(event.message);
         }
@@ -313,6 +315,23 @@ function onDropperEvent(event) {
         if (event.asyncMessage) {
             addAsyncHistory(event.asyncMessage);
         }
+        if (event.galerie) {
+            $('#galerieInfo').html('');
+            $('#galerieInfo').append('Un album a été créé, vous pouvez le visualiser en suivant ce lien&nbsp;: ');
+            $('<a>',{
+                text: 'Galerie photo',
+                title: 'Lien vers vos photos téléchargées',
+                href: 'files/'+event.galerie+'/',
+                target: '_blank',
+
+            }).appendTo('#galerieInfo');
+            $('#galerieInfo').append('. Si vous ne rechargez pas cette page, les nouvelles photos que vous enverrez ' +
+                'seront ajoutez à ce même album.');
+            setTimeout(function(){
+                $('#dropInfo').fadeOut();
+                $('#galerieInfo').fadeIn();
+            }, 1000);
+        }
     }
 }
 
@@ -321,14 +340,14 @@ function addHistory(text, edit) {
     let history = $('#history');
     history
         .append('<div class="dyn">'+text+' <span>'+edit+'</span></div>')
-        .animate({scrollTop: history.prop("scrollHeight")}, 100);
+        .animate({scrollTop: history.prop("scrollHeight")}, 80);
 }
 
 function addAsyncHistory(text) {
     let history = $('#history');
     history
         .append('<div>'+text+'</div>')
-        .animate({scrollTop: history.prop("scrollHeight")}, 100);
+        .animate({scrollTop: history.prop("scrollHeight")}, 80);
 }
 
 function editHistory(text) {

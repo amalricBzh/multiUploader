@@ -1,5 +1,5 @@
 body {
-    font-size: 16px;
+    font-size: 14px;
     color: dimgrey;
     background-color: antiquewhite;
     font-family: 'Prompt', sans-serif;
@@ -36,8 +36,8 @@ header {
     border-radius: 30px;
     border: 3px dashed dimgrey;
     text-align: center;
-    line-height: 120px;
-    font-size: 2em;
+    line-height: 125px;
+    font-size: 2.4em;
     background-color: #f2f2ff;
     font-family: 'Lobster', cursive;
 }
@@ -55,6 +55,10 @@ header {
 #dropInfo {
     display: none;
     font-size:0.7em;
+}
+
+#galerieInfo {
+    display: none;
 }
 
 .progress {
@@ -131,18 +135,18 @@ input {
     top:40%;
     display: inline-block;
     position: relative;
-    width: 64px;
-    height: 64px;
+    width: 128px;
+    height: 128px;
     transform: rotate(45deg);
-    transform-origin: 32px 32px;
+    transform-origin: 64px 64px;
     background: antiquewhite;
 }
 .lds-heart div {
-    top: 23px;
-    left: 19px;
+    top: 46px;
+    left: 38px;
     position: absolute;
-    width: 26px;
-    height: 26px;
+    width: 52px;
+    height: 52px;
     background: #f00;
     animation: lds-heart 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
 }
@@ -151,16 +155,16 @@ input {
     content: " ";
     position: absolute;
     display: block;
-    width: 26px;
-    height: 26px;
+    width: 52px;
+    height: 52px;
     background: #f00;
 }
 .lds-heart div:before {
-    left: -17px;
+    left: -34px;
     border-radius: 50% 0 0 50%;
 }
 .lds-heart div:after {
-    top: -17px;
+    top: -34px;
     border-radius: 50% 50% 0 0;
 }
 @keyframes lds-heart {

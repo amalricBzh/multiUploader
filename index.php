@@ -20,7 +20,7 @@
     </div>
     <div class="mainRow">
         <input id="username" name="nom" placeholder="Vos prénom et nom" />
-        &nbsp; &nbsp; &nbsp;
+
         <input id="email" name="email" placeholder="Votre email" />
     </div>
     <div id="dropfile" class="mainRow">Déposez un ou plusieurs fichiers ici.</div>
@@ -38,6 +38,8 @@
 
         <div class="mainRow" id="history">
         </div>
+    </div>
+    <div id="galerieInfo" class="mainRow">
 
     </div>
 
