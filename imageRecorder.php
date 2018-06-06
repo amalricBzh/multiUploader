@@ -18,9 +18,16 @@ function filterMail($mail) {
 
 
 if (isset($_FILES['myfile'])) {
-    $fileName = $_FILES['myfile']['name'];
-    $fileType = $_FILES['myfile']['type'];
-    $fileSize = $_FILES['myfile']['size'];
+    $fileName = isset($_FILES['myfile']['name']) ? trim($_FILES['myfile']['name']): '';
+    $fileType = isset($_FILES['myfile']['type']) ? trim($_FILES['myfile']['type']): '';
+    $fileSize = isset($_FILES['myfile']['size']) ? trim($_FILES['myfile']['size']): '';
+
+    if (empty($fileName) || empty($fileType) || empty($fileSize)) {
+        echo json_encode([
+            "message" => "Les donénes envoyées ne sont pas valides.",
+        ]);
+        return;
+    }
 
     $username = $_POST['username'] ;
     $email = $_POST['email'] ;

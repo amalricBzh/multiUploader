@@ -57,10 +57,6 @@ header {
     font-size:0.7em;
 }
 
-#galerieInfo {
-    display: none;
-}
-
 .progress {
     height: 30px;
     margin: 20px auto;
@@ -95,16 +91,25 @@ header {
     text-align:center;
 }
 
-#history {
+#galerieInfo {
+    display: none;
+}
+
+#history > div,
+#galerieInfo > div {
     border-radius: 5px;
     border: 1px solid dimgrey;
     padding: 10px;
-    height: 180px;
     overflow-y: auto;
-    font-family: 'Share Tech Mono', monospace;
 }
 
-#history div span {
+#history > div {
+    height: 160px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8em;
+}
+
+#history > div > div span {
     float: right;
 }
 
@@ -128,8 +133,6 @@ input {
     height: 100%;
     text-align:center;
 }
-
-
 
 .lds-heart {
     top:40%;
