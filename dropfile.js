@@ -11,7 +11,7 @@ function formatBytes(bytes, decimals) {
     }
     let k = 1024,
         dm = decimals || 2,
-        sizes = ["o", "Ko", "Mo", "Go"],
+        sizes = {0: "o", 1: "Ko", 2: "Mo", 3: "Go"},
         i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
@@ -62,7 +62,7 @@ function DropUpload(params) {
         chenillardStep %= steps.length ;
         onEvent({
             type: "message",
-            lastStatus: steps[chenillardStep]
+            lastStatus: steps[chenillardStep] // eslint-disable-line detect-object-injection
         });
 
         let message = {
@@ -92,6 +92,7 @@ function DropUpload(params) {
             nbFiles,
             nbFilesCompleted
         });
+        /* eslint-disable-next-line no-use-before-define */
         uploadNext();
     }
 
@@ -186,10 +187,11 @@ function DropUpload(params) {
         }
     }
 
+    /* eslint-disable-next-line complexity */
     function processFiles(files) {
         onEvent({
             type: "message",
-            asyncMessage: "Lecture des fichiers"
+            asyncMessage: "Initialisation du nouveau transfert..."
         });
         if (!files || !files.length) {
             return ;
@@ -202,9 +204,9 @@ function DropUpload(params) {
         // Add each file to queue
         for (let i = 0; i < files.length ; i++) {
             //console.log(files[i]);
-            filelist.push(files[i]);
+            filelist.push(files[i]);    // eslint-disable-line security/detect-object-injection
             nbFiles ++ ;
-            totalSize += files[i].size;
+            totalSize += files[i].size;     // eslint-disable-line security/detect-object-injection
         }
 
         // If not uploading, start upload
@@ -251,15 +253,14 @@ function DropUpload(params) {
         }
     });
 
-    return {}
+    return {} ;
 }
-
 
 function addHistory(text, edit) {
     edit = edit || "";
     let history = $("#history");
     history
-        .append('<div class="dyn">'+text+" <span>"+edit+"</span></div>")
+        .append("<div class=\"dyn\">"+text+" <span>"+edit+"</span></div>")
         .animate({scrollTop: history.prop("scrollHeight")}, 80);
 }
 
