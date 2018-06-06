@@ -6,13 +6,14 @@ $(window).bind("load", function(){
 });
 
 function formatBytes(bytes, decimals) {
-    if(bytes === 0) {
+    if (bytes === 0) {
         return "0" ;
     }
     let k = 1024,
         dm = decimals || 2,
-        sizes = {0: "o", 1: "Ko", 2: "Mo", 3: "Go"},
+        sizes = ["o", "Ko", "Mo", "Go"] ;
         i = Math.floor(Math.log(bytes) / Math.log(k));
+    // eslint-disable-next-line security/detect-object-injection
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
@@ -41,7 +42,7 @@ function DropUpload(params) {
     // nom du répertoire basé sur le timestamp en secondes pour un nom
     // unique pseudo-aléatoire. Valable pour toutes les phots chargées par
     // cette page
-    var directory = Math.floor(Date.now() / 1000) - 1528200000 ;
+    var directory = Math.floor(Date.now() / 1000) - 1528280000 ;
 
     function init() {
         filelist = [];
@@ -62,7 +63,7 @@ function DropUpload(params) {
         chenillardStep %= steps.length ;
         onEvent({
             type: "message",
-            lastStatus: steps[chenillardStep] // eslint-disable-line detect-object-injection
+            lastStatus: steps[chenillardStep] // eslint-disable-line security/detect-object-injection
         });
 
         let message = {
@@ -77,7 +78,7 @@ function DropUpload(params) {
         message.totalProgression = Math.round(100 * totalProgress / totalSize);
         message.totalCurrent = totalProgress ;
         message.totalMax = totalSize;
-        // contournement pb sur les arrondis et somme d"arrondis...
+        // contournement pb sur les arrondis et somme d'arrondis...
         if (message.totalProgression >= 100) {
             message.totalProgression = 100 ;
             message.totalCurrent = message.totalMax ;
@@ -85,28 +86,56 @@ function DropUpload(params) {
         onEvent(message);
     }
 
-    function handleComplete(/* file */) {
+    function handleComplete(event, filesize) {
         nbFilesCompleted ++ ;
         onEvent({
             type: "progress",
             nbFiles,
             nbFilesCompleted
         });
+        if (event.fileSize === filesize) {
+            // On a bien la bonne taille de fichier
+            onEvent({
+                type: "message",
+                lastStatus: "OK"
+            });
+            if (event.fileType === "image/gif" || event.fileType === "image/jpeg" || event.fileType === "image/png") {
+                // On dit qu'on a une nouvelle image
+                onEvent({
+                    type: "image",
+                    fileType: event.fileType.replace("image/", ""),
+                    fileSize: event.fileSize,
+                    fileName: event.filename
+                });
+            }
+        } else {
+            onEvent({
+                type: "message",
+                lastStatus: "Erreur"
+            });
+            onEvent({
+                type: "message",
+                message: "Le transfert du fichier a été interrompu avant la fin."
+            });
+        }
         /* eslint-disable-next-line no-use-before-define */
         uploadNext();
     }
 
     function uploadFile(file) {
         let xhr = new XMLHttpRequest();
+        let filesize = file.size ;
         xhr.open("POST", "/imageRecorder.php");
-        xhr.onload = function () {
+        xhr.responseType = 'json';
+
+        xhr.onload = function (event) {
             onEvent({
                 type: "message",
                 lastStatus: "Terminé"
             });
-            handleComplete(file);
+            handleComplete(event.target.response, filesize);
         };
-        xhr.error = function () {
+        xhr.error = function (event) {
             onEvent({
                 type: "message",
                 lastStatus: "Erreur"
@@ -115,7 +144,7 @@ function DropUpload(params) {
                 type: "message",
                 message: "Erreur de transfert, le fichier n'a pas été transféré."
             });
-            handleComplete(file);
+            handleComplete(event.target.response, filesize);
         };
         xhr.upload.onprogress = function (event) {
             handleProgress(event);
@@ -160,14 +189,14 @@ function DropUpload(params) {
                 message: "Transfert de "+ nextFile.name,
                 lastStatus: "*$nbsp;$nbsp;$nbsp;$nbsp;"
             });
-            if (nextFile.size > 200 * 1024 * 1024) {
+            if (nextFile.size > 300 * 1024 * 1024) {
                 onEvent({
                     type: "message",
                     lastStatus: "Erreur"
                 });
                 onEvent({
                     type: "message",
-                    message: "Fichier " + nextFile.name + " trop gros : ignoré (maximum : 200Mo)."
+                    message: "Fichier " + nextFile.name + " trop gros : ignoré (maximum : 300Mo)."
                 });
                 handleComplete(nextFile);
             } else {
@@ -275,6 +304,7 @@ function editHistory(text) {
     $("#history div.dyn span").last().html(text);
 }
 
+// eslint-disable complexity
 function onDropperEvent(event) {
     if (event.type && (event.type === "progress" || event.type === "start")) {
         // Infos et progress bar fichiers
@@ -346,9 +376,14 @@ function onDropperEvent(event) {
             }, 1000);
         }
     }
-}
 
-new DropUpload({
+    if (event.type && event.type === "image") {
+        console.log ('Image => ', event);
+    }
+}
+// eslint-enable complexity
+
+let dropper = new DropUpload({
     dropZone: "#dropfile",
     onEvent: onDropperEvent,
     usernameField: "#username",

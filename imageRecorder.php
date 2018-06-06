@@ -18,9 +18,9 @@ function filterMail($mail) {
 
 
 if (isset($_FILES['myfile'])) {
-    $sFileName = $_FILES['myfile']['name'];
-    $sFileType = $_FILES['myfile']['type'];
-    $sFileSize = bytesToSize1024($_FILES['myfile']['size'], 1);
+    $fileName = $_FILES['myfile']['name'];
+    $fileType = $_FILES['myfile']['type'];
+    $fileSize = $_FILES['myfile']['size'];
 
     $username = $_POST['username'] ;
     $email = $_POST['email'] ;
@@ -46,16 +46,29 @@ if (isset($_FILES['myfile'])) {
         FILE_APPEND | LOCK_EX
     );
     // Move uploaded file
-    move_uploaded_file( $_FILES['myfile']['tmp_name'], $directory. $_FILES['myfile']['name']);
+    $fullFilename = $directory. $_FILES['myfile']['name'] ;
+    move_uploaded_file( $_FILES['myfile']['tmp_name'], $fullFilename);
 
-    echo <<<EOF
-<div class="s">
-    <p>Le fichier {$sFileName} a été correctement transféré.</p>
-    <p>Type : {$sFileType}</p>
-    <p>Taille : {$sFileSize}</p>
-</div>
-EOF;
+    // Check file size for basic integrity
+    $serverFilesize = filesize($fullFilename);
+    if ((int) $fileSize !== $serverFilesize) {
+        echo json_encode([
+            "message" => "Erreur : le fichier {$fileName} n'a pas été correctement transféré.",
+            "fileType" => $fileType,
+            "fileSize" => $fileSize,
+            "serveurFilesize" => $serverFilesize
+        ]);
+        return ;
+    }
 
+    echo json_encode([
+        "message" => "Le fichier {$fileName} a été correctement transféré.",
+        "fileType" => $fileType,
+        "fileSize" => $fileSize,
+        "filename" => $fullFilename
+        ]);
 } else {
-    echo '<div class="f">Une erreur s\'est produite.</div>';
+    echo json_encode([
+        "message" => "Une erreur s'est produite.",
+    ]);
 }

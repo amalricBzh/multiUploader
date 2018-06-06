@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="dropfile.css">
     <title>21 juillet 2018 - Les photos</title>
+    <link rel="icon" type="image/png" href="favicon.png" />
 </header>
 <body>
     <div id="spinner">
