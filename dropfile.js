@@ -1,3 +1,5 @@
+/* eslint complexity: ["error", 12]*/
+
 // Remove spinner when all is loaded (especially web fonts)
 $(window).bind("load", function(){
     $("#spinner").fadeOut(800, function() {
@@ -146,24 +148,26 @@ function onEventImage(event) { }
 
 // Routage des évènement
 function onDropperEvent(event) {
-    if (event.type && event.type === "progress") {
-        onEventProgress(event);
-    }
-    if (event.type && event.type === "start") {
-        onEventStart(event);
+    switch (event.type) {
+        case "start":
+            onEventStart(event);
+            break;
+        case "progress":
+            onEventProgress(event);
+            break;
+        case "end":
+            onEventEnd(event);
+            break;
+        case "image":
+            onEventImage(event);
+            break;
+        case "message":
+            onEventMessage(event);
+            break;
+        default:
+            break;
     }
 
-    if (event.type && event.type === "end") {
-        onEventEnd(event);
-    }
-
-    if (event.type && event.type === "message") {
-        onEventMessage(event);
-    }
-
-    if (event.type && event.type === "image") {
-        onEventImage(event);
-    }
 }
 
 /* global Dropper */

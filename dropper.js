@@ -1,4 +1,5 @@
-/*eslint complexity: ["error", 10]*/
+/* eslint complexity: ["error", 10]*/
+/* eslint no-use-before-define": ["error", { "functions": false }] */
 
 function Dropper(params) {
 
@@ -104,9 +105,7 @@ function Dropper(params) {
             });
         }
 
-        // eslint-disable no-use-before-define
         uploadNext();
-        // eslint-enable no-use-before-define
     }
 
     function uploadFile(file) {
