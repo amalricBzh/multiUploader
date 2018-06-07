@@ -1,10 +1,25 @@
 <?php
 
 if (isset($_FILES['myfile'])) {
-    $fileName = isset($_FILES['myfile']['name']) ? trim($_FILES['myfile']['name']): '';
-    $fileType = isset($_FILES['myfile']['type']) ? trim($_FILES['myfile']['type']): '';
-    $fileSize = isset($_FILES['myfile']['size']) ? trim($_FILES['myfile']['size']): '';
-    $directory = isset($_POST['directory']) ? trim($_POST['directory']): '000';
+    $fileName = '' ;
+    $fileType = '' ;
+    $fileSize = '';
+    $directory = '000';
+    $username = 'Anonyme' ;
+    $email = '' ;
+    // Validation
+    if (isset($_FILES['myfile']['name'])) {
+        $fileName = trim($_FILES['myfile']['name']);
+    }
+    if (isset($_FILES['myfile']['type'])) {
+        $fileType = trim($_FILES['myfile']['type']) ;
+    }
+    if (isset($_FILES['myfile']['size'])) {
+        $fileSize = trim($_FILES['myfile']['size']) ;
+    }
+    if (isset($_POST['directory'])) {
+        $directory = trim($_POST['directory']) ;
+    }
 
     if (empty($fileName) || empty($fileType) || empty($fileSize) || empty($directory)) {
         echo json_encode([
@@ -12,14 +27,14 @@ if (isset($_FILES['myfile'])) {
         ]);
         return;
     }
-
-    $username = isset($_POST['username']) ? trim ($_POST['username']) : 'Anonyme' ;
-    $email = isset($_POST['email']) ? trim ($_POST['email']) : '' ;
-    $email = $_POST['email'] ;
-
+    if (isset($_POST['username'])) {
+        $username = trim ($_POST['username']) ;
+    }
+    if (isset($_POST['email'])) {
+        $email = trim ($_POST['email']) ;
+    }
 
     $directory = 'files/'.$directory.'/';
-
     $userInfo = $username ;
 
     if ($email !== '') {

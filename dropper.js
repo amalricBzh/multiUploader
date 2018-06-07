@@ -104,7 +104,9 @@ function Dropper(params) {
             });
         }
 
-        uploadNext(); /* eslint-disable-line no-use-before-define */
+        // eslint-disable no-use-before-define
+        uploadNext();
+        // eslint-enable no-use-before-define
     }
 
     function uploadFile(file) {

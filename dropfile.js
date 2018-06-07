@@ -17,7 +17,7 @@ function formatBytes(bytes, decimals) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
 
-
+// History functions
 function addHistory(text, edit) {
     edit = edit || "";
     let history = $("#history > div");
@@ -37,85 +37,136 @@ function editHistory(text) {
     $("#history > div > div.dyn span").last().html(text);
 }
 
-// eslint-disable complexity
+
+// Progress bar functions
+function setFilenameProgressBar(filename) {
+    $("#dropfileinfomessage").html(filename + " ");
+}
+
+function setFilesizeProgressBar(filesize) {
+    $("#dropfileinfosize").html(filesize);
+}
+
+function setFileProgressionProgressBar(progression) {
+    $("#barFile span").css("width", progression+"%");
+    $("#barFile").attr("data-label", progression+"%");
+}
+
+function setTotalProgressionProgressBar(progression) {
+    $("#barTotal span").css("width", progression+"%");
+    $("#barTotal").attr("data-label", progression+"%");
+}
+
+function setTotalFileNbProgressBar(nbFilesCompleted, nbFiles) {
+    $("#droptotalinfomessage").html("Fichiers transférés : " + nbFilesCompleted + "/" + nbFiles);
+}
+
+function setTotalSizeProgressBar(current, max) {
+    $("#droptotalinfosize").html(formatBytes(current)+"/"+formatBytes(max));
+}
+
+
+
+// Event management functions
+function onEventStart(event) {
+    setFilenameProgressBar(event.filename);
+    setFilesizeProgressBar(formatBytes(event.fileCurrent)+"/"+formatBytes(event.fileMax));
+    setTotalFileNbProgressBar(event.nbFilesCompleted, event.nbFiles);
+    setTotalSizeProgressBar(event.totalCurrent, event.totalMax);
+    $("#dropfile").html("Transfert en cours...");
+    $("#dropInfo").show();
+}
+
+function onEventEnd(/* event */) {
+    $("#dropfile").html("Déposez un ou plusieurs fichiers ici.");
+    $("#dropfileinfosize").html("Terminé.");
+}
+
+function onEventProgress(event) {
+    // Infos et progress bar fichiers
+    if (event.hasOwnProperty("fileProgression")) {
+        setFileProgressionProgressBar(event.fileProgression);
+    }
+    if (event.hasOwnProperty("filename")) {
+        setFilenameProgressBar(event.filename + " ");
+    }
+    if (event.hasOwnProperty("fileCurrent") && event.hasOwnProperty("fileMax")) {
+        if (event.fileCurrent === event.fileMax) {
+            // Tout est transféré, il faut copier du répertoire temporaire au final (en php)
+            setFilesizeProgressBar("Finalisation...");
+            editHistory("Finalisation...");
+        } else {
+            setFilesizeProgressBar(formatBytes(event.fileCurrent)+"/"+formatBytes(event.fileMax));
+        }
+    }
+    // Infos et progress bar total
+    if (event.hasOwnProperty("totalProgression")) {
+        setTotalProgressionProgressBar(event.totalProgression);
+    }
+    if (event.hasOwnProperty("nbFiles") && event.hasOwnProperty("nbFilesCompleted")) {
+        setTotalFileNbProgressBar(event.nbFilesCompleted, event.nbFiles);
+    }
+    if (event.hasOwnProperty("totalCurrent") && event.hasOwnProperty("totalMax")) {
+        setTotalSizeProgressBar(event.totalCurrent, event.totalMax);
+    }
+}
+
+function onEventMessage(event) {
+    if (event.message) {
+        addHistory(event.message);
+    }
+    if (event.lastStatus) {
+        editHistory(event.lastStatus);
+    }
+    if (event.asyncMessage) {
+        addAsyncHistory(event.asyncMessage);
+    }
+    if (event.galerie) {
+        let galerieDiv = $("#galerieInfo > div") ;
+        galerieDiv.html("")
+            .append("Un album a été créé, vous pouvez le visualiser en suivant ce lien&nbsp;: ");
+        $("<a>",{
+            text: "Galerie photo",
+            title: "Lien vers vos photos téléchargées",
+            href: "files/"+event.galerie+"/",
+            target: "_blank",
+
+        }).appendTo("#galerieInfo > div");
+        galerieDiv.append(". Si vous ne rechargez pas cette page, les nouvelles photos que vous enverrez " +
+            "seront ajoutez à ce même album.");
+        setTimeout(function(){
+            $("#dropInfo").fadeOut();
+            $("#galerieInfo").fadeIn();
+        }, 1000);
+    }
+}
+
+function onEventImage(event) { }
+
+
+// Routage des évènement
 function onDropperEvent(event) {
-    if (event.type && (event.type === "progress" || event.type === "start")) {
-        // Infos et progress bar fichiers
-        if (event.hasOwnProperty("fileProgression")) {
-            $("#barFile span").css("width", event.fileProgression+"%");
-            $("#barFile").attr("data-label", event.fileProgression+"%");
-        }
-        if (event.hasOwnProperty("filename")) {
-            $("#dropfileinfomessage").html(event.filename + " ");
-        }
-        if (event.hasOwnProperty("fileCurrent") && event.hasOwnProperty("fileMax")) {
-            if (event.fileCurrent === event.fileMax) {
-                // Tout est transféré, il faut copier du répertoire temporaire au final (en php)
-                $("#dropfileinfosize").html("Finalisation...");
-                editHistory("Finalisation...");
-            } else {
-                $("#dropfileinfosize").html(formatBytes(event.fileCurrent)+"/"+formatBytes(event.fileMax));
-            }
-        }
-        // Infos et progress bar total
-        if (event.hasOwnProperty("totalProgression")) {
-            $("#barTotal span").css("width", event.totalProgression+"%");
-            $("#barTotal").attr("data-label", event.totalProgression+"%");
-        }
-        if (event.hasOwnProperty("nbFiles") && event.hasOwnProperty("nbFilesCompleted")) {
-            $("#droptotalinfomessage").html("Fichiers transférés : " + event.nbFilesCompleted + "/" + event.nbFiles);
-        }
-        if (event.hasOwnProperty("totalCurrent") && event.hasOwnProperty("totalMax")) {
-            $("#droptotalinfosize").html(formatBytes(event.totalCurrent)+"/"+formatBytes(event.totalMax));
-        }
+    if (event.type && event.type === "progress") {
+        onEventProgress(event);
     }
     if (event.type && event.type === "start") {
-        $("#dropfile").html("Transfert en cours...");
-        $("#dropInfo").show();
+        onEventStart(event);
     }
+
     if (event.type && event.type === "end") {
-        $("#dropfile").html("Déposez un ou plusieurs fichiers ici.");
-        $("#dropfileinfosize").html("Terminé.");
+        onEventEnd(event);
     }
-    //console.log("onDropperEvent", event);
 
     if (event.type && event.type === "message") {
-        //console.log(event);
-        if (event.message) {
-            addHistory(event.message);
-        }
-        if (event.lastStatus) {
-            editHistory(event.lastStatus);
-        }
-        if (event.asyncMessage) {
-            addAsyncHistory(event.asyncMessage);
-        }
-        if (event.galerie) {
-            let galerieDiv = $("#galerieInfo > div") ;
-            galerieDiv.html("")
-                .append("Un album a été créé, vous pouvez le visualiser en suivant ce lien&nbsp;: ");
-            $("<a>",{
-                text: "Galerie photo",
-                title: "Lien vers vos photos téléchargées",
-                href: "files/"+event.galerie+"/",
-                target: "_blank",
-
-            }).appendTo("#galerieInfo > div");
-            galerieDiv.append(". Si vous ne rechargez pas cette page, les nouvelles photos que vous enverrez " +
-                "seront ajoutez à ce même album.");
-            setTimeout(function(){
-                $("#dropInfo").fadeOut();
-                $("#galerieInfo").fadeIn();
-            }, 1000);
-        }
+        onEventMessage(event);
     }
 
     if (event.type && event.type === "image") {
-        //console.log ("Image => ", event);
+        onEventImage(event);
     }
 }
-// eslint-enable complexity
 
+/* global Dropper */
 let dropper = new Dropper({
     dropZone: "#dropfile",
     onEvent: onDropperEvent,
