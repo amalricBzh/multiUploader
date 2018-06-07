@@ -58,17 +58,25 @@ if (isset($_FILES['myfile'])) {
     );
 
     // Move uploaded file
-    $fullFilename = $directory. $_FILES['myfile']['name'] ;
-    move_uploaded_file( $_FILES['myfile']['tmp_name'], $fullFilename);
+    // Si le fichier destination existe déjà, on renomme celui-ci
+    $originalName = pathinfo($fileName, PATHINFO_FILENAME);
+    $originalExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+    $index = 1 ;
+    while (file_exists($directory. $fileName)) {
+        $fileName = $originalName."($index).".$originalExtension ;
+        $index ++ ;
+    }
+    move_uploaded_file( $_FILES['myfile']['tmp_name'], $directory . $fileName);
 
     // Check file size for basic integrity
-    $serverFilesize = filesize($fullFilename);
+    $serverFilesize = filesize($directory . $fileName);
     if ((int) $fileSize !== $serverFilesize) {
         echo json_encode([
             "message" => "Erreur : le fichier {$fileName} n'a pas été correctement transféré.",
             "fileType" => $fileType,
             "fileSize" => $fileSize,
-            "serveurFilesize" => $serverFilesize
+            "serveurFilesize" => $serverFilesize,
         ]);
         return ;
     }
@@ -77,7 +85,7 @@ if (isset($_FILES['myfile'])) {
         "message" => "Le fichier {$fileName} a été correctement transféré.",
         "fileType" => $fileType,
         "fileSize" => $fileSize,
-        "filename" => $fullFilename
+        "filename" => $directory . $fileName
         ]);
 } else {
     echo json_encode([

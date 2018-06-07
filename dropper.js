@@ -83,16 +83,21 @@ function Dropper(params) {
                 type: "message",
                 lastStatus: "OK"
             });
+            // Evènement nouveau fichier
+            let newEvent = {
+                type: "newFile",
+                fileType: event.fileType,
+                fileSize: event.fileSize,
+                fileName: event.filename
+            };
+
             // Si c'est une image, on envoie un event image
             if (["image/gif", "image/jpeg", "image/png"].indexOf(event.fileType) > -1) {
-                // On dit qu'on a une nouvelle image
-                onEvent({
-                    type: "image",
-                    fileType: event.fileType.replace("image/", ""),
-                    fileSize: event.fileSize,
-                    fileName: event.filename
-                });
+                // On change l'évènement
+                newEvent.type = "image" ;
+                newEvent.fileType= event.fileType.replace("image/", "");
             }
+            onEvent(newEvent);
         } else {
             // Taille du fichier client != taille du ficheir serveur
             onEvent({

@@ -143,7 +143,10 @@ function onEventMessage(event) {
     }
 }
 
-function onEventImage(event) { }
+function onEventNewImage(event) {
+    // On va chercher la vignette
+
+}
 
 
 // Routage des évènement
@@ -158,8 +161,8 @@ function onDropperEvent(event) {
         case "end":
             onEventEnd(event);
             break;
-        case "image":
-            onEventImage(event);
+        case "newImage":
+            onEventnewImage(event);
             break;
         case "message":
             onEventMessage(event);
