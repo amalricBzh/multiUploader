@@ -28,40 +28,37 @@ $vignette64 = createVignette($url, 155);
 echo json_encode($vignette64);
 
 
-
-function createVignette($source, $size)
+function getSourceImage($file)
 {
-
-    $fileType = @exif_imagetype ( $source) ;
+    $fileType = @exif_imagetype ($file) ;
     switch ($fileType) {
         case IMAGETYPE_GIF :
-            $sourceImage = @imagecreatefromgif($source);
+            $sourceImage = @imagecreatefromgif($file);
             break;
         case IMAGETYPE_JPEG:
-            $sourceImage = @imagecreatefromjpeg($source);
+            $sourceImage = @imagecreatefromjpeg($file);
             break;
         case IMAGETYPE_PNG:
-            $sourceImage = @imagecreatefrompng($source);
+            $sourceImage = @imagecreatefrompng($file);
             break;
         default:
-            echo json_encode([
+            return [
                 'result' => 'failed',
                 'message' => 'Unknown format'
-            ]);
-            exit();
+            ];
             break;
     }
 
-    // Création de la vignette
-    if (!$sourceImage) {
-        echo json_encode([
-            'result' => 'failed',
-            'message' => 'le fichier n\'est pas lisible'
-        ]);
-        exit();
-    }
+    return [
+        'result' => 'success',
+        'image' => $sourceImage
+    ];
+}
+
+function getExifData($file)
+{
     // Exif infos
-    $exifDatas = @exif_read_data($source, 'FILE', true, false);
+    $exifDatas = @exif_read_data($file, 'FILE', true, false);
     $exif = [
         'orientation' => 1
     ];
@@ -70,6 +67,22 @@ function createVignette($source, $size)
             $exif['orientation'] = $exifDatas['IFD0']['Orientation'];
         }
     }
+    return $exif ;
+}
+
+
+function createVignette($source, $size)
+{
+    $sourceImageData = getSourceImage($source);
+    // Création de la vignette
+    if ($sourceImageData['result'] !== 'success') {
+        return $sourceImageData;
+    }
+
+    $sourceImage = $sourceImageData['image'];
+
+    $exif = getExifData($source);
+
     // Init création image
     $width = imagesx($sourceImage);
     $newWidth = $width ;
