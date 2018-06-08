@@ -69,16 +69,15 @@ function setTotalSizeProgressBar(current, max) {
 
 // Galery functions
 
-function addGalerieItem(icon, url, fileSize, filename) {
+function addGalerieItem(icon, url, fileSize, fileName) {
+
     let div = document.createElement('div');
     $(div)
-        .append("<div class=\"icon\"><i class=\"far "+ icon+ " fa-5x\"></i></div>")
-        .append("<div class=\"filename\">"+filename+"</div>")
+        .append("<div class=\"icon\"><i class=\"far "+ icon +" fa-5x\"></i></div>")
+        .append("<div class=\"filename\">"+fileName+"</div>")
         .append("<div class=\"filesize\">" + formatBytes(fileSize) + "</div>")
         .appendTo("#galerieInfo > div");
 }
-
-
 
 // Event management functions
 function onEventStart(event) {
@@ -88,11 +87,19 @@ function onEventStart(event) {
     setTotalSizeProgressBar(event.totalCurrent, event.totalMax);
     $("#dropfile").html("Transfert en cours...");
     $("#dropInfo").show();
+    // Affichage galerie après 1.5s
+    setTimeout(function(){
+        $("#galerieInfo").fadeIn();
+    }, 500);
 }
 
 function onEventEnd(/* event */) {
     $("#dropfile").html("Déposez un ou plusieurs fichiers ici.");
     $("#dropfileinfosize").html("Terminé.");
+    // Cache des progress bar après 1.5s
+    setTimeout(function(){
+        $("#dropInfo").fadeOut();
+    }, 1500);
 }
 
 function onEventProgress(event) {
@@ -134,30 +141,28 @@ function onEventMessage(event) {
     if (event.asyncMessage) {
         addAsyncHistory(event.asyncMessage);
     }
-    if (event.galerie) {
-       /* let galerieDiv = $("#galerieInfo > div") ;
-        galerieDiv.html("")
-            .append("Un album a été créé, vous pouvez le visualiser en suivant ce lien&nbsp;: ");
-        $("<a>",{
-            text: "Galerie photo",
-            title: "Lien vers vos photos téléchargées",
-            href: "files/"+event.galerie+"/",
-            target: "_blank",
-
-        }).appendTo("#galerieInfo > div");
-        galerieDiv.append(". Si vous ne rechargez pas cette page, les nouvelles photos que vous enverrez " +
-            "seront ajoutez à ce même album.");
-            */
-        setTimeout(function(){
-            $("#dropInfo").fadeOut();
-            $("#galerieInfo").fadeIn();
-        }, 1000);
-    }
 }
 
 function onEventNewImage(event) {
     // On va chercher la vignette
-    addGalerieItem('fa-file-image', event.fileUrl, event.fileSize, event.fileName);
+    // Get thumbail
+    $.get("imageThumbnail.php", {url: event.fileUrl})
+        .done(function(data) {
+            jsonData = JSON.parse(data);
+            if (jsonData.result === "success") {
+                let div = document.createElement('div');
+                $(div)
+                    .append("<div class=\"image\"><img src=\"data:image/png;base64,"+jsonData.thumbnail+"\" /></div>")
+                    .append("<div class=\"filename\">" + event.fileName+"</div>")
+                    .append("<div class=\"filesize\">" + formatBytes(event.fileSize) + "</div>")
+                    .appendTo("#galerieInfo > div");
+            } else {
+                addGalerieItem('fa-image', event.url, event.fileSize, event.fileName);
+            }
+        })
+        .fail(function(data) {
+            addGalerieItem('fa-image', event.url, event.fileSize, event.fileName);
+        });
 
 }
 
@@ -203,9 +208,11 @@ function onDropperEvent(event) {
             onEventEnd(event);
             break;
         case "newImage":
+            console.log('New Image');
             onEventNewImage(event);
             break;
         case "newFile":
+            console.log('New File');
             onEventNewFile(event);
             break;
         case "message":

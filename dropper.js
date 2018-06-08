@@ -23,9 +23,9 @@ function Dropper(params) {
     var chenillardStep = 0 ;
 
     // nom du répertoire basé sur le timestamp en secondes pour un nom
-    // unique pseudo-aléatoire. Valable pour toutes les phots chargées par
+    // unique pseudo-aléatoire. Valable pour toutes les photos chargées par
     // cette page
-    var directory = Math.floor(Date.now() / 1000) - 1528280000 ;
+    var directory = Math.floor(Date.now() / 1000) - 1528400000 ;
 
     function init() {
         filelist = [];
@@ -203,7 +203,6 @@ function Dropper(params) {
             onEvent({
                 type: "message",
                 asyncMessage: "Tous les transferts sont terminés !",
-                galerie: directory
             });
         }
     }
