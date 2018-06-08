@@ -88,13 +88,14 @@ function Dropper(params) {
                 type: "newFile",
                 fileType: event.fileType,
                 fileSize: event.fileSize,
-                fileName: event.filename
+                fileName: event.filename,
+                fileUrl: event.fileUrl
             };
 
             // Si c'est une image, on envoie un event image
             if (["image/gif", "image/jpeg", "image/png"].indexOf(event.fileType) > -1) {
                 // On change l'évènement
-                newEvent.type = "image" ;
+                newEvent.type = "newImage" ;
                 newEvent.fileType= event.fileType.replace("image/", "");
             }
             onEvent(newEvent);

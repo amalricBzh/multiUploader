@@ -85,7 +85,8 @@ if (isset($_FILES['myfile'])) {
         "message" => "Le fichier {$fileName} a été correctement transféré.",
         "fileType" => $fileType,
         "fileSize" => $fileSize,
-        "filename" => $directory . $fileName
+        "fileUrl" => $directory . $fileName,
+        "filename" => $fileName,
         ]);
 } else {
     echo json_encode([

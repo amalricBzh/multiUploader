@@ -67,6 +67,17 @@ function setTotalSizeProgressBar(current, max) {
     $("#droptotalinfosize").html(formatBytes(current)+"/"+formatBytes(max));
 }
 
+// Galery functions
+
+function addGalerieItem(icon, url, fileSize, filename) {
+    let div = document.createElement('div');
+    $(div)
+        .append("<div class=\"icon\"><i class=\"far "+ icon+ " fa-5x\"></i></div>")
+        .append("<div class=\"filename\">"+filename+"</div>")
+        .append("<div class=\"filesize\">" + formatBytes(fileSize) + "</div>")
+        .appendTo("#galerieInfo > div");
+}
+
 
 
 // Event management functions
@@ -124,7 +135,7 @@ function onEventMessage(event) {
         addAsyncHistory(event.asyncMessage);
     }
     if (event.galerie) {
-        let galerieDiv = $("#galerieInfo > div") ;
+       /* let galerieDiv = $("#galerieInfo > div") ;
         galerieDiv.html("")
             .append("Un album a été créé, vous pouvez le visualiser en suivant ce lien&nbsp;: ");
         $("<a>",{
@@ -136,6 +147,7 @@ function onEventMessage(event) {
         }).appendTo("#galerieInfo > div");
         galerieDiv.append(". Si vous ne rechargez pas cette page, les nouvelles photos que vous enverrez " +
             "seront ajoutez à ce même album.");
+            */
         setTimeout(function(){
             $("#dropInfo").fadeOut();
             $("#galerieInfo").fadeIn();
@@ -145,7 +157,36 @@ function onEventMessage(event) {
 
 function onEventNewImage(event) {
     // On va chercher la vignette
+    addGalerieItem('fa-file-image', event.fileUrl, event.fileSize, event.fileName);
 
+}
+
+function onEventNewFile(event) {
+    // On ajoute une vignette à la galerie
+    let icon = 'fa-file';
+    switch (event.fileType) {
+        case "application/x-gzip":
+            icon = "fa-file-archive";
+            break;
+        case "application/pdf":
+            icon= "fa-file-pdf";
+            break;
+        case "text/plain":
+            icon = "fa-file-alt";
+            break;
+        case "application/vnd.oasis.opendocument.spreadsheet":
+        case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+        case "application/vnd.ms-excel":
+            icon = "fa-file-excel";
+            break;
+        case "application/vnd.oasis.opendocument.text":
+        case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            icon = "fa-file-word";
+            break;
+        default:
+            break;
+    }
+    addGalerieItem(icon, event.fileUrl, event.fileSize, event.fileName);
 }
 
 
@@ -162,7 +203,10 @@ function onDropperEvent(event) {
             onEventEnd(event);
             break;
         case "newImage":
-            onEventnewImage(event);
+            onEventNewImage(event);
+            break;
+        case "newFile":
+            onEventNewFile(event);
             break;
         case "message":
             onEventMessage(event);

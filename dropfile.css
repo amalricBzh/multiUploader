@@ -91,27 +91,64 @@ header {
     text-align:center;
 }
 
-#galerieInfo {
-    display: none;
-}
-
 #history > div,
 #galerieInfo > div {
     border-radius: 5px;
     border: 1px solid dimgrey;
     padding: 10px;
-    overflow-y: auto;
 }
 
 #history > div {
     height: 160px;
     font-family: 'Share Tech Mono', monospace;
     font-size: 0.8em;
+    overflow-y: auto;
 }
 
 #history > div > div span {
     float: right;
 }
+
+#galerieInfo {
+    display: none;
+    min-height: 160px;
+}
+
+#galerieInfo > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 10px 0;
+}
+#galerieInfo > div > div {
+    display: flex;
+    flex-direction: column;
+    width: 155px;
+    height: 155px;
+    text-align: center;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+
+#galerieInfo > div > div > div.icon {
+    color: cornflowerblue;
+    margin: 15px;
+}
+#galerieInfo > div > div > div.filename {
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.7em;
+}
+#galerieInfo > div > div > div.filesize {
+    font-style: italic;
+    font-size: 0.9em;
+    margin: 10px;
+}
+
 
 input {
     width: 45%;
