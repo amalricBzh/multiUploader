@@ -1,26 +1,3 @@
-body {
-    font-size: 14px;
-    color: dimgrey;
-    background-color: antiquewhite;
-    font-family: 'Prompt', sans-serif;
-}
-
-h1, h2, h3, h4 {
-    font-family: 'Pinyon Script', cursive;
-    color: darkblue;
-}
-h1 {
-    font-size: 4em;
-}
-header {
-    text-align: center;
-    margin: 20px;
-}
-
-.mainRow {
-    width: 700px;
-    margin: 10px auto;
-}
 
 .mainRow .infoChamps {
     font-size: 0.7em;
@@ -91,13 +68,6 @@ header {
     text-align:center;
 }
 
-#history > div,
-#galerieInfo > div {
-    border-radius: 5px;
-    border: 1px solid dimgrey;
-    padding: 10px;
-}
-
 #history > div {
     height: 160px;
     font-family: 'Share Tech Mono', monospace;
@@ -112,25 +82,6 @@ header {
 #galerieInfo {
     display: none;
     min-height: 160px;
-}
-
-#galerieInfo > div {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    align-items: center;
-    padding: 10px 0;
-}
-#galerieInfo > div > div {
-    display: flex;
-    flex-direction: column;
-    width: 155px;
-    min-height: 150px;
-    text-align: center;
-    border: 1px solid #d2d2d2;
-    border-radius: 5px;
-    margin-bottom: 10px;
 }
 
 #galerieInfo > div > div > div.icon {

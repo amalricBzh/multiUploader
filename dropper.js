@@ -25,7 +25,7 @@ function Dropper(params) {
     // nom du répertoire basé sur le timestamp en secondes pour un nom
     // unique pseudo-aléatoire. Valable pour toutes les photos chargées par
     // cette page
-    var directory = Math.floor(Date.now() / 1000) - 1528400000 ;
+    var directory = Math.floor(Date.now() / 1000) - 1528700000 ;
 
     function init() {
         filelist = [];
