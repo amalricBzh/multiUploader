@@ -222,10 +222,12 @@ function onDropperEvent(event) {
 
 }
 
-/* global Dropper */
-let dropper = new Dropper({
-    dropZone: "#dropfile",
-    onEvent: onDropperEvent,
-    usernameField: "#username",
-    emailField: "#email"
+$(document).ready(function (){
+    /* global Dropper */
+    let dropper = new Dropper({
+        dropZone: "#dropfile",
+        onEvent: onDropperEvent,
+        usernameField: "#username",
+        emailField: "#email"
+    });
 });
