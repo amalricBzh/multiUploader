@@ -148,7 +148,7 @@ function onEventNewImage(event) {
     // Get thumbail
     $.get("imageThumbnail.php", {url: event.fileUrl})
         .done(function(data) {
-            jsonData = JSON.parse(data);
+            let jsonData = JSON.parse(data);
             if (jsonData.result === "success") {
                 let div = document.createElement('div');
                 $(div)
@@ -160,7 +160,7 @@ function onEventNewImage(event) {
                 addGalerieItem('fa-image', event.url, event.fileSize, event.fileName);
             }
         })
-        .fail(function(data) {
+        .fail(function(/*data*/) {
             addGalerieItem('fa-image', event.url, event.fileSize, event.fileName);
         });
 

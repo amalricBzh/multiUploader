@@ -1,6 +1,6 @@
 
-.mainRow .infoChamps {
-    font-size: 0.7em;
+.mainRow.infoChamps {
+    font-size: 0.9em;
 }
 
 #dropInfo .mainRow {

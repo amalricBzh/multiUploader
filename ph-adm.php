@@ -1,21 +1,20 @@
 <?php
 
 function formatSizeUnits($bytes) {
+    $res = '0 octets';
     if ($bytes >= 1073741824) {
-        $bytes = number_format($bytes / 1073741824, 2) . ' Go';
+        $res = number_format($bytes / 1073741824, 2) . ' Go';
     } elseif ($bytes >= 1048576) {
-        $bytes = number_format($bytes / 1048576, 2) . ' Mo';
+        $res = number_format($bytes / 1048576, 2) . ' Mo';
     } elseif ($bytes >= 1024) {
-        $bytes = number_format($bytes / 1024, 2) . ' Ko';
+        $res = number_format($bytes / 1024, 2) . ' Ko';
     } elseif ($bytes > 1) {
-        $bytes = $bytes . ' octets';
+        $res = $bytes . ' octets';
     } elseif ($bytes == 1) {
-        $bytes = $bytes . ' octet';
-    } else {
-        $bytes = '0 octets';
+        $res = $bytes . ' octet';
     }
 
-    return $bytes;
+    return $res;
 }
 
 
@@ -54,9 +53,6 @@ function getGaleryInfos($name) {
         closedir($handle);
     }
 
-
-
-
     return [
         'name' => $name,
         'fullname' => $directory,
@@ -67,8 +63,6 @@ function getGaleryInfos($name) {
         'email' => $email,
     ] ;
 }
-
-
 
 
 function getGaleries(){
@@ -91,20 +85,23 @@ function getGaleries(){
 $galeries = getGaleries();
 
 
-?><html>
-<header>
-    <meta charset="UTF-8">
+?><!doctype html><html>
+<head>
+    <meta charset="UTF-8" />
     <title>21 juillet 2018 - Photos admin</title>
-    <link href="https://fonts.googleapis.com/css?family=Pinyon+Script|Lobster|Prompt|Racing+Sans+One|Share+Tech+Mono" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <link rel="stylesheet" href="21juillet.css">
-    <link rel="stylesheet" href="admin.css">
+    <link href="https://fonts.googleapis.com/css?family=Pinyon+Script|Lobster|Prompt|Racing+Sans+One|Share+Tech+Mono"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous" />
+    <link rel="stylesheet" href="21juillet.css" />
+    <link rel="stylesheet" href="adm.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
-</header>
+</head>
 <body>
 <div id="spinner">
-    <div class="lds-heart"><div></div></div>
+    <div class="lds-heart"><div>
 </div>
 
 <header>
@@ -117,16 +114,16 @@ $galeries = getGaleries();
     <?php
         foreach ($galeries as $name => $galerie) {
             echo "<div>";
-            echo "<div><a href=\"{$galerie['fullname']}\" target=\"_blank\">{$galerie['name']}</a></div>";
-            if (strlen(trim($galerie['user']))>0){
-                echo "<div>{$galerie['user']}</div>";
+            echo "<div><a href=\"{$galerie['fullname']}\" target=\"_blank\">{$galerie['name']}</a></div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            if (strlen(trim($galerie['user']))>0) {
+                echo "<div>{$galerie['user']}</div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
             }
-            if (strlen(trim($galerie['email']))>0){
-                echo "<div>{$galerie['email']}</div>";
+            if (strlen(trim($galerie['email']))>0) {
+                echo "<div>{$galerie['email']}</div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
             }
-            echo "<div>{$galerie['nbFiles']} fichier(s)</div>";
-            echo "<div>".formatSizeUnits($galerie['size'])."</div>";
-            echo "<div><a href=\"ph-zip.php?g={$galerie['name']}\"><i class=\"fas fa-download\"></i></a></div>";
+            echo "<div>{$galerie['nbFiles']} fichier(s)</div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            echo "<div>".formatSizeUnits($galerie['size'])."</div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            echo "<div><a href=\"ph-zip.php?g={$galerie['name']}\"><i class=\"fas fa-download\"></i></a></div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
             echo "</div>";
         }
     ?>

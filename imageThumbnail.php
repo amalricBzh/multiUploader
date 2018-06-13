@@ -63,7 +63,7 @@ function getExifData($file)
         'orientation' => 1
     ];
     if ($exifDatas !== false) {
-        if (!empty($exifDatas['IFD0']['Orientation'])){
+        if (!empty($exifDatas['IFD0']['Orientation'])) {
             $exif['orientation'] = $exifDatas['IFD0']['Orientation'];
         }
     }
@@ -88,11 +88,11 @@ function createVignette($source, $size)
     $newWidth = $width ;
     $height = imagesy($sourceImage);
     $newHeight = $height ;
-    if ($newWidth > $size){
+    if ($newWidth > $size) {
         $newWidth = $size ;
         $newHeight = floor($height * $size / $width);
     }
-    if ($newHeight > $size){
+    if ($newHeight > $size) {
         $newHeight = $size ;
         $newWidth = floor($width * $size / $height);
     }
@@ -100,7 +100,7 @@ function createVignette($source, $size)
     // Copie source dans la vignette avec changement de la taille
     imagecopyresampled($vignette, $sourceImage, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
     // Tourne la vignette
-    switch($exif['orientation']) {
+    switch ($exif['orientation']) {
         case 3:
             $vignette = imagerotate($vignette, 180, 0);
             break;
@@ -119,7 +119,7 @@ function createVignette($source, $size)
     }
 
     ob_start();
-        imagejpeg($vignette, NULL, 60);
+        imagejpeg($vignette, null, 60);
         $resizedJpegData = ob_get_contents();
     ob_end_clean();
 
