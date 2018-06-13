@@ -49,3 +49,4 @@ function getGaleryInfos($name) {
 $galery = $_GET['g'] ;
 $galeryInfo = getGaleryInfos($galery);
 var_dump($galeryInfo);
+

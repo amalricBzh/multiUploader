@@ -71,7 +71,7 @@ function setTotalSizeProgressBar(current, max) {
 
 function addGalerieItem(icon, url, fileSize, fileName) {
 
-    let div = document.createElement('div');
+    let div = document.createElement("div");
     $(div)
         .append("<div class=\"icon\"><i class=\"far "+ icon +" fa-5x\"></i></div>")
         .append("<div class=\"filename\">"+fileName+"</div>")
@@ -150,7 +150,7 @@ function onEventNewImage(event) {
         .done(function(data) {
             let jsonData = JSON.parse(data);
             if (jsonData.result === "success") {
-                let div = document.createElement('div');
+                let div = document.createElement("div");
                 $(div)
                     .append("<div class=\"image\"><img src=\"data:image/png;base64,"+jsonData.thumbnail+"\" /></div>")
                     .append("<div class=\"filename\">" + event.fileName+"</div>")
@@ -168,7 +168,7 @@ function onEventNewImage(event) {
 
 function onEventNewFile(event) {
     // On ajoute une vignette à la galerie
-    let icon = 'fa-file';
+    let icon = "fa-file";
     switch (event.fileType) {
         case "application/x-gzip":
             icon = "fa-file-archive";
@@ -208,11 +208,9 @@ function onDropperEvent(event) {
             onEventEnd(event);
             break;
         case "newImage":
-            console.log('New Image');
             onEventNewImage(event);
             break;
         case "newFile":
-            console.log('New File');
             onEventNewFile(event);
             break;
         case "message":
