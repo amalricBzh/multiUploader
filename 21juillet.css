@@ -1,8 +1,17 @@
+html, body{ height:100%; margin:0; }
+
+/* Trick */
+body{
+    display:flex;
+    flex-direction:column;
+}
+
 body {
     font-size: 14px;
     color: dimgrey;
     background-color: antiquewhite;
     font-family: 'Prompt', sans-serif;
+    min-height: 100%;
 }
 
 h1, h2, h3, h4 {
@@ -15,6 +24,21 @@ h1 {
 header {
     text-align: center;
     margin: 20px;
+}
+
+footer {
+    clear: both;
+    position: relative;
+    height: 2em;
+    margin-top: auto;
+    text-align: center;
+    background-color: darkblue;
+    color: antiquewhite;
+    font-size: 0.8em;
+}
+footer a {
+    color: antiquewhite;
+    text-decoration: none;
 }
 
 .mainRow {
@@ -47,4 +71,75 @@ header {
     border-radius: 5px;
     margin-bottom: 10px;
     overflow-x: hidden;
+}
+
+
+/************** Spinner ***************/
+#spinner {
+    background: antiquewhite;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align:center;
+}
+
+.lds-heart {
+    top:40%;
+    display: inline-block;
+    position: relative;
+    width: 128px;
+    height: 128px;
+    transform: rotate(45deg);
+    transform-origin: 64px 64px;
+    background: antiquewhite;
+}
+.lds-heart div {
+    top: 46px;
+    left: 38px;
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    background: #f00;
+    animation: lds-heart 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.lds-heart div:after,
+.lds-heart div:before {
+    content: " ";
+    position: absolute;
+    display: block;
+    width: 52px;
+    height: 52px;
+    background: #f00;
+}
+.lds-heart div:before {
+    left: -34px;
+    border-radius: 50% 0 0 50%;
+}
+.lds-heart div:after {
+    top: -34px;
+    border-radius: 50% 50% 0 0;
+}
+@keyframes lds-heart {
+    0% {
+        transform: scale(0.95);
+    }
+    5% {
+        transform: scale(1.1);
+    }
+    39% {
+        transform: scale(0.85);
+    }
+    45% {
+        transform: scale(1);
+    }
+    60% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(0.9);
+    }
 }

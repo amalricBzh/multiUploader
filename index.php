@@ -18,36 +18,42 @@
         <h1>Les photos - 21 juillet 2018</h1>
     </header>
 
-    <div class="mainRow infoChamps">
-        Afin de nous permettre de reconnaître vos photos, merci de renseigner ces deux champs facultatifs&nbsp;:
-    </div>
-    <div class="mainRow">
-        <input id="username" name="nom" placeholder="Vos prénom et nom" />
+    <article>
 
-        <input id="email" name="email" placeholder="Votre email" />
-    </div>
-    <div id="dropfile" class="mainRow">Déposez un ou plusieurs fichiers ici.</div>
-
-    <div id="dropInfo" class="mainRow">
-        <div ><div id="dropfileinfomessage"></div><div id="dropfileinfosize"></div></div>
-        <div id="barFile" class="progress mainRow" data-label="Pas de transfert en cours...">
-            <span class="value"></span>
+        <div class="mainRow infoChamps">
+            Afin de nous permettre de reconnaître vos photos, merci de renseigner ces deux champs facultatifs&nbsp;:
         </div>
+        <div class="mainRow">
+            <input id="username" name="nom" placeholder="Vos prénom et nom" />
 
-        <div class="mainRow"><div id="droptotalinfomessage"></div><div id="droptotalinfosize"></div></div>
-        <div id="barTotal" class="progress mainRow" data-label="Pas de transfert en cours...">
-            <span class="value"></span>
+            <input id="email" name="email" placeholder="Votre email" />
         </div>
-    </div>
-    <div class="mainRow" id="history">
-        <h2>Messages</h2>
-        <div></div>
-    </div>
-    <div id="galerieInfo" class="mainRow">
-        <h2>Galerie</h2>
-        <div></div>
-    </div>
+        <div id="dropfile" class="mainRow">Déposez un ou plusieurs fichiers ici.</div>
 
+        <div id="dropInfo" class="mainRow">
+            <div ><div id="dropfileinfomessage"></div><div id="dropfileinfosize"></div></div>
+            <div id="barFile" class="progress mainRow" data-label="Pas de transfert en cours...">
+                <span class="value"></span>
+            </div>
+
+            <div class="mainRow"><div id="droptotalinfomessage"></div><div id="droptotalinfosize"></div></div>
+            <div id="barTotal" class="progress mainRow" data-label="Pas de transfert en cours...">
+                <span class="value"></span>
+            </div>
+        </div>
+        <div class="mainRow" id="history">
+            <h2>Messages</h2>
+            <div></div>
+        </div>
+        <div id="galerieInfo" class="mainRow">
+            <h2>Galerie</h2>
+            <div></div>
+        </div>
+    </article>
+
+    <footer>
+        <a href="https://github.com/amalricBzh/multiUploader" target="_blank"><i>multiUploader 0.1</i></a> codé pour l'occasion..<a href="ph-adm.php">.</a>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
