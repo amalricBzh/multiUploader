@@ -77,6 +77,29 @@ function generateZip(galerie) {
         });
 }
 
+function deleteGallery(galerie) {
+    $("#spinner").fadeIn(300, function() {
+        $(this).show();
+    });
+    $.get("ph-del.php?g="+galerie)
+        .done(function(data) {
+            setCogNormal(galerie);
+            $("#spinner").fadeOut(500, function() {
+                $(this).hide();
+            });
+            let jsonData = JSON.parse(data);
+            if (jsonData['result'] === true) {
+                $("div[data-gallery=\""+galerie+"\"]")
+                    .remove();
+            }
+        })
+        .fail(function(/*data*/) {
+            $("#spinner").fadeOut(500, function() {
+                $(this).hide();
+            });
+        });
+}
+
 
 $(document).ready(function (){
     $("span.cog").one("click", function(event){
@@ -85,6 +108,31 @@ $(document).ready(function (){
         let galerie = $(this).data("id") ;
         startZipAnimation(galerie);
         generateZip(galerie);
+        return false ;
+    });
+
+    $("span.trash").click(function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        let galerie = $(this).data("id") ;
+        $("#deleteGaleryId").html(galerie);
+        $("#deletePopin").show(500);
+        return false ;
+    });
+
+    $("#deleteNo").click(function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        $("#deletePopin").hide(500);
+        return false ;
+    });
+
+    $("#deleteYes").click(function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        $("#deletePopin").hide(500);
+        let galery = $("#deleteGaleryId").html();
+        deleteGallery(galery);
         return false ;
     });
 });

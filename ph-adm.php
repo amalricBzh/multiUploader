@@ -101,7 +101,7 @@ foreach ($galeries as $name => $galery) {
             <div>
             <?php
                 foreach ($galeries as $name => $galerie) {
-                    echo "<div>";
+                    echo "<div data-gallery=\"{$galerie['name']}\">";
                     echo "<div><a href=\"{$galerie['fullname']}\" target=\"_blank\">{$galerie['name']}</a></div>";
                     if (strlen(trim($galerie['user']))>0) {
                         echo "<div>{$galerie['user']}</div>";
@@ -123,6 +123,10 @@ foreach ($galeries as $name => $galery) {
                         echo '</a>';
                         echo '</span>';
                     }
+                    // Si pas de molette, tout est généré, on affiche la poubelle...
+                    if (!$galerie['cog']) {
+                        echo " <span class=\"trash\" data-id=\"{$galerie['name']}\"><i class=\"fas fa-trash\"></i></span>";
+                    }
                     echo "</div>" ;
                     echo "</div>";
                 }
@@ -135,6 +139,16 @@ foreach ($galeries as $name => $galery) {
         <a href="https://github.com/amalricBzh/multiUploader" target="_blank"><i>multiUploader 0.1</i></a>
         codé pour l'occasion..<a href="ph-adm.php">.</a>
     </footer>
+
+    <div id="deletePopin">
+        <div>
+            <div>Voulez-vous réellement supprimer la galerie <span id="deleteGaleryId">XXX</span>&nbsp;?</div>
+            <div>
+                <button id="deleteNo" class="color-green">Non</button>
+                <button id="deleteYes" class="color-red">Oui</button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
