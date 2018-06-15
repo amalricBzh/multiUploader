@@ -1,7 +1,6 @@
 <?php
 
 function getGaleryInfos($name) {
-
     $directory = 'files/' . $name ;
     $files = [];
     $size = 0;
@@ -46,17 +45,3 @@ function getGaleryInfos($name) {
     ] ;
 }
 
-function getZipInfos($name) {
-    $progressFile = 'files/'.$name.'.progress.json' ;
-    $zipInfos = [] ;
-    if (file_exists($progressFile)) {
-        $zipInfos = json_decode(file_get_contents($progressFile));
-    } else {
-        $galeryInfo = getGaleryInfos($name);
-        $galeryInfo['zip'] = [];
-        file_put_contents(json_encode($galeryInfo), FILE_APPEND);
-
-    }
-
-
-}

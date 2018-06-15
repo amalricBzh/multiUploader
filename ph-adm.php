@@ -47,8 +47,6 @@ $galeries = getGaleries();
           rel="stylesheet" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
-          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous" />
     <link rel="stylesheet" href="21juillet.css" />
     <link rel="stylesheet" href="adm.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
@@ -61,7 +59,6 @@ $galeries = getGaleries();
 <header>
     <h1>Admin photos - 21 juillet 2018</h1>
 </header>
-
 <div id="galerieInfo" class="mainRow">
     <h2>Galeries</h2>
     <div>
@@ -70,15 +67,16 @@ $galeries = getGaleries();
             echo "<div>";
             echo "<div><a href=\"{$galerie['fullname']}\" target=\"_blank\">{$galerie['name']}</a></div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
             if (strlen(trim($galerie['user']))>0) {
-                echo "<div>{$galerie['user']}</div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+                echo "<div>{$galerie['user']}</div>";                   // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
             }
             if (strlen(trim($galerie['email']))>0) {
-                echo "<div>{$galerie['email']}</div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+                echo "<div>{$galerie['email']}</div>";                  // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
             }
-            echo "<div>{$galerie['nbFiles']} fichier(s)</div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
-            echo "<div>".formatSizeUnits($galerie['size'])."</div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
-            echo "<div><i class=\"fas fa-cog\" data-id=\"{$galerie['name']}\"></i> " ;
-            echo "<a href=\"ph-zip.php?g={$galerie['name']}\"><i class=\"fas fa-download\"></i></a></div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            echo "<div>{$galerie['nbFiles']} fichier(s)</div>";                             // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            echo "<div>".formatSizeUnits($galerie['size'])."</div>";                        // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            echo "<div class=\"icons\" data-id=\"{$galerie['name']}\">" ;                   // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            echo "<span class=\"cog\" data-id=\"{$galerie['name']}\"><i class=\"fas fa-cog\"></i></span>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            echo "</div>" ;
             echo "</div>";
         }
     ?>
@@ -93,6 +91,9 @@ $galeries = getGaleries();
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
         integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js"
+        integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe"
         crossorigin="anonymous"></script>
 <script src="adm.js"></script>
 </body>

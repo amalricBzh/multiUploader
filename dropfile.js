@@ -85,12 +85,15 @@ function onEventStart(event) {
     setFilesizeProgressBar(formatBytes(event.fileCurrent)+"/"+formatBytes(event.fileMax));
     setTotalFileNbProgressBar(event.nbFilesCompleted, event.nbFiles);
     setTotalSizeProgressBar(event.totalCurrent, event.totalMax);
-    $("#dropfile").html("Transfert en cours...");
+    let dropfile = $("#dropfile");
+    if (dropfile.html().match("^Déposez")) {
+        dropfile.html("Transfert en cours... &nbsp; <i class=\"fas fa-sync fa-spin\"></i>");
+    }
     $("#dropInfo").show();
     // Affichage galerie après 1.5s
     setTimeout(function(){
         $("#galerieInfo").fadeIn();
-    }, 500);
+    }, 1500);
 }
 
 function onEventEnd(/* event */) {
@@ -157,11 +160,11 @@ function onEventNewImage(event) {
                     .append("<div class=\"filesize\">" + formatBytes(event.fileSize) + "</div>")
                     .appendTo("#galerieInfo > div");
             } else {
-                addGalerieItem('fa-image', event.url, event.fileSize, event.fileName);
+                addGalerieItem("fa-image", event.url, event.fileSize, event.fileName);
             }
         })
         .fail(function(/*data*/) {
-            addGalerieItem('fa-image', event.url, event.fileSize, event.fileName);
+            addGalerieItem("fa-image", event.url, event.fileSize, event.fileName);
         });
 
 }
