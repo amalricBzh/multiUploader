@@ -1,6 +1,7 @@
 <?php
 
-function getGaleryInfos($name) {
+function getGaleryInfos($name)
+{
     $directory = 'files/' . $name ;
     $files = [];
     $size = 0;
@@ -45,3 +46,29 @@ function getGaleryInfos($name) {
     ] ;
 }
 
+
+function getZipInfo()
+{
+    $directory = 'files' ;
+    $files = [];
+    if ($handle = opendir($directory)) {
+        // Pour chaque entrée qui n'est pas un répertoire
+        while (false !== ($entry = readdir($handle))) {
+            // Si c'est un json
+            if (pathinfo($entry, PATHINFO_EXTENSION) === 'json') {
+                // Read json file
+                $string = file_get_contents($directory .'/'.$entry);
+                $jsonData = json_decode($string, true);
+                $name = pathinfo($entry, PATHINFO_FILENAME);
+                $files[$name] = [
+                    'name' => $name,
+                    'allDone' => count($jsonData['todo']) === 0,
+                    'zipFiles' => $jsonData['done']
+                ];
+            }
+        }
+        closedir($handle);
+    }
+
+    return $files ;
+}

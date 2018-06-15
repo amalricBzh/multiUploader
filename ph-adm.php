@@ -37,6 +37,22 @@ function getGaleries(){
 
 
 $galeries = getGaleries();
+$zipInfo = getZipInfo();
+
+foreach ($galeries as $name => $galery) {
+    $galeries[$name]['cog'] = false ;
+    // Si pas de zip info, ou zipInfo{allDone] = false => on met la roue crantée pour (re)générer le zip.
+    if (!array_key_exists($name, $zipInfo) || $zipInfo[$name]['allDone'] === false ){
+        $galeries[$name]['cog'] = true ;
+    }
+    $galeries[$name]['zipFiles'] = [];
+    // S'il y a des zips à afficher
+    if (array_key_exists($name, $zipInfo) && count($zipInfo[$name]['zipFiles']) > 0){
+        $galeries[$name]['zipFiles'] = $zipInfo[$name]['zipFiles'] ;
+    }
+}
+
+echo "<pre>"; var_dump($galeries); echo "</pre>";
 
 
 ?><!doctype html><html>
@@ -65,17 +81,27 @@ $galeries = getGaleries();
     <?php
         foreach ($galeries as $name => $galerie) {
             echo "<div>";
-            echo "<div><a href=\"{$galerie['fullname']}\" target=\"_blank\">{$galerie['name']}</a></div>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            echo "<div><a href=\"{$galerie['fullname']}\" target=\"_blank\">{$galerie['name']}</a></div>";
             if (strlen(trim($galerie['user']))>0) {
-                echo "<div>{$galerie['user']}</div>";                   // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+                echo "<div>{$galerie['user']}</div>";
             }
             if (strlen(trim($galerie['email']))>0) {
-                echo "<div>{$galerie['email']}</div>";                  // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+                echo "<div>{$galerie['email']}</div>";
             }
-            echo "<div>{$galerie['nbFiles']} fichier(s)</div>";                             // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
-            echo "<div>".formatSizeUnits($galerie['size'])."</div>";                        // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
-            echo "<div class=\"icons\" data-id=\"{$galerie['name']}\">" ;                   // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
-            echo "<span class=\"cog\" data-id=\"{$galerie['name']}\"><i class=\"fas fa-cog\"></i></span>"; // phpcs: ignore PHPCS_WordPress_XSS_EscapeOutput
+            echo "<div>{$galerie['nbFiles']} fichier(s)</div>";
+            echo "<div>".formatSizeUnits($galerie['size'])."</div>";
+            echo "<div class=\"icons\" data-id=\"{$galerie['name']}\">" ;
+            if ($galerie['cog']) {
+                echo "<span class=\"cog\" data-id=\"{$galerie['name']}\"><i class=\"fas fa-cog\"></i></span>";
+            }
+            foreach ($galerie['zipFiles'] as $zip) {
+                echo ' <a href="'.$zip.'">';
+                echo '<span class="fa-layers fa-fw">';
+                echo '<i class="fas fa-download"></i>';
+                echo '<span class="fa-layers-counter download-badge">' . explode('.', $zip)[1]. '</span>';
+                echo '</a>';
+                echo '</span>';
+            }
             echo "</div>" ;
             echo "</div>";
         }

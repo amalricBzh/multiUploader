@@ -6,6 +6,14 @@ include 'inc-galerie.php' ;
 ///////////////////////////////
 
 $startTime = microtime(true);
+
+// Check g GET : if not set, returns info on existing zips.
+// if set, a zip generation for "g" galery is asked.
+if (!isset($_GET['g'])) {
+    // No more used (for Ajax calls only)
+    return getZipInfo();
+}
+
 $galery = $_GET['g'] ;
 
 // On regarde s'il y a des infos de zippage
