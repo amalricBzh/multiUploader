@@ -1,11 +1,3 @@
-// Remove spinner when all is loaded (especially web fonts)
-$(window).bind("load", function(){
-    $("#spinner").fadeOut(800, function() {
-        (this).remove();
-    });
-});
-
-
 
 function startZipAnimation(galerie) {
     $("span.cog[data-id=\""+galerie+"\"]")
@@ -48,7 +40,7 @@ function removeCog(galerie) {
 
 function addDownload(galerie, zipFile) {
     // Get zip number
-    let number = zipFile.split('.')[1];
+    let number = zipFile.split(".")[1];
     let badge = "<span class=\"fa-layers-counter download-badge\">" + number + "</span>";
     let icon = "<i class=\"fas fa-download\"></i>" + badge ;
     let container = "<span class=\"fa-layers fa-fw\">" + icon + "</span>";

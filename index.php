@@ -52,7 +52,8 @@
     </article>
 
     <footer>
-        <a href="https://github.com/amalricBzh/multiUploader" target="_blank"><i>multiUploader 0.1</i></a> codé pour l'occasion..<a href="ph-adm.php">.</a>
+        <a href="https://github.com/amalricBzh/multiUploader" target="_blank"><i>multiUploader 0.1</i></a>
+        codé pour l'occasion..<a href="ph-adm.php">.</a>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -60,6 +61,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     <script src="dropper.js"></script>
     <script src="dropfile.js"></script>
+    <script src="21juillet.js"></script>
 </body>
 
 </html>
