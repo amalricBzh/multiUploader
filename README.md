@@ -19,7 +19,7 @@ JS script to upload several files to a php server
 
 To manage and download sent files, go to ph-adm.php
 
-#Todo
+# Todo
 
 1. Config file (and config service)
 2. Better source organisation
