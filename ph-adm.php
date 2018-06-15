@@ -52,9 +52,6 @@ foreach ($galeries as $name => $galery) {
     }
 }
 
-echo "<pre>"; var_dump($galeries); echo "</pre>";
-
-
 ?><!doctype html><html>
 <head>
     <meta charset="UTF-8" />

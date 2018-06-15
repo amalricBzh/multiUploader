@@ -47,7 +47,7 @@ $zipSize = 0 ;
 if ($zipInfo['currentZip'] !== null) {
     // Si le zip plus le prochain fichier font plus de 200Mo, OU que le dernier ajout a duré plus de 10s,
     // on fait un nouveau zip.
-    if (filesize($zipInfo['currentZip']) + $file['size'] > 20 * 1024 * 1024 ||
+    if (filesize($zipInfo['currentZip']) + $file['size'] > 200 * 1024 * 1024 ||
         $zipInfo['lastTime'] > 10) {
         $zipInfo['done'][] = $zipInfo['currentZip'] ;
         $zipInfo['newZip'][] = $zipInfo['currentZip'] ;
